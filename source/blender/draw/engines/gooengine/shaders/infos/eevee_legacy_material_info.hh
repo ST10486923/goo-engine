@@ -149,19 +149,16 @@ GPU_SHADER_CREATE_INFO(eevee_legacy_material_prepass_frag_opaque_common)
 
 GPU_SHADER_CREATE_INFO(eevee_legacy_material_prepass_frag_opaque)
     .additional_info("eevee_legacy_surface_lib_common")
-    .additional_info("eevee_legacy_material_prepass_frag_opaque_common")
-    .fragment_out(2, Type::VEC2, "out_normal");
+    .additional_info("eevee_legacy_material_prepass_frag_opaque_common");
 
 GPU_SHADER_CREATE_INFO(eevee_legacy_material_prepass_frag_opaque_hair)
     .additional_info("eevee_legacy_surface_lib_hair")
     .additional_info("eevee_legacy_material_prepass_frag_opaque_common")
-    .additional_info("draw_hair")
-    .fragment_out(2, Type::VEC2, "out_normal");
+    .additional_info("draw_hair");
 
 GPU_SHADER_CREATE_INFO(eevee_legacy_material_prepass_frag_opaque_pointcloud)
     .additional_info("eevee_legacy_material_prepass_frag_opaque_common")
-    .additional_info("draw_pointcloud")
-    .fragment_out(2, Type::VEC2, "out_normal");
+    .additional_info("draw_pointcloud");
 
 /* Common info for all `prepass_frag_alpha_hash` variants. */
 GPU_SHADER_CREATE_INFO(eevee_legacy_material_prepass_frag_alpha_hash_common)
@@ -171,46 +168,14 @@ GPU_SHADER_CREATE_INFO(eevee_legacy_material_prepass_frag_alpha_hash_common)
 
 GPU_SHADER_CREATE_INFO(eevee_legacy_material_prepass_frag_alpha_hash)
     .additional_info("eevee_legacy_surface_lib_common")
-    .additional_info("eevee_legacy_material_prepass_frag_alpha_hash_common")
-    .fragment_out(2, Type::VEC2, "out_normal");
+    .additional_info("eevee_legacy_material_prepass_frag_alpha_hash_common");
 
 GPU_SHADER_CREATE_INFO(eevee_legacy_material_prepass_frag_alpha_hash_hair)
     .additional_info("eevee_legacy_surface_lib_hair")
     .additional_info("eevee_legacy_material_prepass_frag_alpha_hash_common")
-    .additional_info("draw_hair")
-    .fragment_out(2, Type::VEC2, "out_normal");
+    .additional_info("draw_hair");
 
 GPU_SHADER_CREATE_INFO(eevee_legacy_material_prepass_frag_alpha_hash_pointcloud)
-    .additional_info("eevee_legacy_surface_lib_pointcloud")
-    .additional_info("eevee_legacy_material_prepass_frag_alpha_hash_common")
-    .additional_info("draw_pointcloud")
-    .fragment_out(2, Type::VEC2, "out_normal");
-
-/* Shadow Variants (Same as prepass but NO Normal Output) */
-
-GPU_SHADER_CREATE_INFO(eevee_legacy_material_shadow_frag_opaque)
-    .additional_info("eevee_legacy_surface_lib_common")
-    .additional_info("eevee_legacy_material_prepass_frag_opaque_common");
-
-GPU_SHADER_CREATE_INFO(eevee_legacy_material_shadow_frag_opaque_hair)
-    .additional_info("eevee_legacy_surface_lib_hair")
-    .additional_info("eevee_legacy_material_prepass_frag_opaque_common")
-    .additional_info("draw_hair");
-
-GPU_SHADER_CREATE_INFO(eevee_legacy_material_shadow_frag_opaque_pointcloud)
-    .additional_info("eevee_legacy_material_prepass_frag_opaque_common")
-    .additional_info("draw_pointcloud");
-
-GPU_SHADER_CREATE_INFO(eevee_legacy_material_shadow_frag_alpha_hash)
-    .additional_info("eevee_legacy_surface_lib_common")
-    .additional_info("eevee_legacy_material_prepass_frag_alpha_hash_common");
-
-GPU_SHADER_CREATE_INFO(eevee_legacy_material_shadow_frag_alpha_hash_hair)
-    .additional_info("eevee_legacy_surface_lib_hair")
-    .additional_info("eevee_legacy_material_prepass_frag_alpha_hash_common")
-    .additional_info("draw_hair");
-
-GPU_SHADER_CREATE_INFO(eevee_legacy_material_shadow_frag_alpha_hash_pointcloud)
     .additional_info("eevee_legacy_surface_lib_pointcloud")
     .additional_info("eevee_legacy_material_prepass_frag_alpha_hash_common")
     .additional_info("draw_pointcloud");
