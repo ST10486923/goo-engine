@@ -34,6 +34,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           ref: goo-engine-v4.4-release
+          lfs: true
 
       - name: Cache precompiled libraries
         id: libs-cache
