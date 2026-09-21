@@ -1,0 +1,78 @@
+# Builds Goo Engine v4.4 (Blender fork) for Windows on GitHub's hosted runner.
+# No local toolchain is required: the windows-2022 runner ships with Visual Studio 2022.
+#
+# How to use:
+#   Actions tab -> "Build Goo Engine (Windows)" -> Run workflow.
+#   When finished, download the "goo-engine-v4.4-windows" artifact and run blender.exe.
+#
+# Notes:
+#   - Precompiled libraries live in a Git LFS repo on projects.blender.org and are
+#     shallow-cloned into lib/windows_x64 (a full clone of that repo is ~20 GB).
+#   - The build dir is forced inside the workspace so it can be uploaded as an artifact.
+#   - CUDA/OptiX kernels are skipped (no GPU SDK on the runner); Eevee + Goo's NPR nodes build fine.
+
+name: Build Goo Engine (Windows)
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - goo-engine-v4.4-release
+    paths:
+      - '.github/workflows/goo-build.yml'
+  schedule:
+    - cron: '0 3 * * 0'
+
+jobs:
+  build:
+    runs-on: windows-2022
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v4
+        with:
+          ref: goo-engine-v4.4-release
+
+      - name: Cache precompiled libraries
+        id: libs-cache
+        uses: actions/cache@v4
+        with:
+          path: lib/windows_x64
+          key: goo-libs-windows_x64-blender-v4.4-release
+
+      - name: Fetch precompiled libraries
+        if: steps.libs-cache.outputs.cache-hit != 'true'
+        shell: pwsh
+        run: |
+          git lfs install --local
+          if (Test-Path lib/windows_x64) { Remove-Item -Recurse -Force lib/windows_x64 }
+          git clone --depth 1 --branch blender-v4.4-release https://projects.blender.org/blender/lib-windows_x64.git lib/windows_x64
+          git -C lib/windows_x64 lfs pull
+
+      - name: Cache release assets
+        id: assets-cache
+        uses: actions/cache@v4
+        with:
+          path: release/datafiles/assets
+          key: goo-assets-blender-v4.4-release
+
+      - name: Fetch release assets
+        if: steps.assets-cache.outputs.cache-hit != 'true'
+        shell: pwsh
+        run: |
+          if (Test-Path release/datafiles/assets) { Remove-Item -Recurse -Force release/datafiles/assets }
+          git clone --depth 1 --branch blender-v4.4-release https://projects.blender.org/blender/blender-assets.git release/datafiles/assets
+          git -C release/datafiles/assets lfs pull
+
+      - name: Build
+        shell: cmd
+        run: make builddir ${{ github.workspace }}\build_windows ninja 2022
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: goo-engine-v4.4-windows
+          path: build_windows/bin
+          retention-days: 14
